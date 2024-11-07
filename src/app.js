@@ -3,6 +3,6 @@ const dotenv = require('dotenv');
 
 const app = express();
 
-dotenv.config({ path: './src/config/.env' });
+dotenv.config();
 
 app.listen(process.env.PORT);

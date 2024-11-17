@@ -9,7 +9,7 @@ router
   .route('/:id?')
   .get(authToken, paramChangeToInt, scheduleController.getSchedule)
   .post(authToken, scheduleController.addSchedule)
-//   .put()
-//   .delete()
+//   .put() //스케쥴 수정
+//   .delete() //스케쥴 삭제
 
 module.exports = router;

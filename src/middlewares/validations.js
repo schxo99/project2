@@ -48,10 +48,17 @@ const scheduleValidation = [
   validate
 ]
 
+const reivewValidation = [
+  body('placeId').isInt(),
+  body('description').isString(),
+  validate
+]
+
 module.exports = {
   signupValidation,
   loginValidation,
   createTripValidation,
   paramChangeToInt,
-  scheduleValidation
+  scheduleValidation,
+  reivewValidation
 }

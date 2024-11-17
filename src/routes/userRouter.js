@@ -10,4 +10,9 @@ router.post('/login', loginValidation, userController.login);
 router.delete('/logout', authToken, userController.logout);
 router.get('/refresh', refreshToken, userController.updateAccessToken);
 
+// router
+//   .route('/account')
+//   .put() // 회원정보 수정
+//   .delete() //탈퇴
+
 module.exports = router;

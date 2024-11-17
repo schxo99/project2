@@ -1,4 +1,3 @@
-const { validationResult } = require("express-validator");
 const { StatusCodes } = require("http-status-codes");
 const userService = require('../services/userService')
 

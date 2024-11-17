@@ -8,7 +8,7 @@ router
   .route('/:id?')
   .get(authToken, tripController.getTrips)
   .post(authToken, createTripValidation, tripController.createTrip)
-  // .put(tripController.changeTrip)
+  // .put(tripController.changeTrip) // 여행 수정
   .delete(authToken, paramChangeToInt, tripController.deleteTrip)
 
 module.exports = router;

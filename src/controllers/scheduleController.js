@@ -24,7 +24,16 @@ const addSchedule = async(req,res) => {
   }
 }
 
+// const deleteSchedule = async(req,res) => {
+//   try{
+
+//   }catch(err){
+//     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:'서버에러'})
+//   }
+// }
+
 module.exports = {
   getSchedule,
-  addSchedule
+  addSchedule,
+  // deleteSchedule
 }

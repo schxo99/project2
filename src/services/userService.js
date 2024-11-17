@@ -1,9 +1,9 @@
 const db = require('../models');
-const {createAccessToken, createRefreshToken, isMatchPassword} = require('../utils/authUtil');
+const {createAccessToken, createRefreshToken, isMatchPassword, createHashPassword} = require('../utils/authUtil');
 
-const signup = async (userInfo) => {
+const createUser = async (userInfo) => {
   try{
-    userInfo = await authUtil.createHashPassword(userInfo);
+    userInfo = await createHashPassword(userInfo);
     await db.User.create({
       name: userInfo.name,
       email: userInfo.email,
@@ -21,7 +21,7 @@ const signup = async (userInfo) => {
 const login = async (email, password) => {
   try{
     const userInfo = await db.User.findOne({ where: { email: email }, raw: true });
-    console.log(userInfo)
+    await logout(userInfo.id)
     if(userInfo && await isMatchPassword(userInfo, password)){
       const accessToken = await createAccessToken(userInfo)
       const refreshToken = await createRefreshToken(userInfo)
@@ -56,7 +56,7 @@ const updateAccessToken = async(userInfo) => {
   }
 }
 module.exports = {
-  signup,
+  createUser,
   login,
   logout,
   updateAccessToken

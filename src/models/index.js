@@ -11,6 +11,6 @@ db.Token = require('./token')(sequelize, DataTypes)
 db.Trip = require('./trip')(sequelize, DataTypes)
 db.Schedule = require('./schedule')(sequelize, DataTypes)
 db.Review = require('./review')(sequelize, DataTypes)
-
+db.Rating = require('./rating')(sequelize, DataTypes)
 
 module.exports = db;

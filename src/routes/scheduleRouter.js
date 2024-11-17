@@ -10,6 +10,6 @@ router
   .get(authToken, paramChangeToInt, scheduleController.getSchedule)
   .post(authToken, scheduleController.addSchedule)
 //   .put() //스케쥴 수정
-//   .delete() //스케쥴 삭제
+  // .delete(authToken, scheduleController.deleteSchedule) //스케쥴 삭제
 
 module.exports = router;

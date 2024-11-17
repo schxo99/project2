@@ -9,11 +9,12 @@ const getSchedule = async (tripId) => {
     })
     return scheduleInfo
   }catch(err){
-    throw new Error('tripService getSchedule Err', err)
+    throw new Error('scheduleService getSchedule Err', err)
   }
 }
 
 const addSchedule = async (scheduleInfo) => {
+  // trip기간에 해당안되는 date가 들어오는 예외처리해야함
   try{
     console.log(scheduleInfo)
     scheduleInfo.forEach(async (element)  => {
@@ -24,8 +25,6 @@ const addSchedule = async (scheduleInfo) => {
         orderId: element.orderId
       })
     });
-      
-    
     return
   }catch(err){
     throw new Error('scheduleService addSchedule Err', err)

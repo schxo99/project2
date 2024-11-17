@@ -12,7 +12,7 @@ const validate = (req,res,next) =>{
   }
 }
 
-const signupValidation = [
+const signupValidate = [
   body('name').isString(),
   body('email').isEmail(),
   body('password').isString().isLength({min: 4}),
@@ -21,7 +21,7 @@ const signupValidation = [
   validate
 ];
 
-const loginValidation = [
+const loginValidate = [
   body('email').isEmail(),
   body('password').isString(),
   validate
@@ -55,8 +55,8 @@ const reivewValidation = [
 ]
 
 module.exports = {
-  signupValidation,
-  loginValidation,
+  signupValidate,
+  loginValidate,
   createTripValidation,
   paramChangeToInt,
   scheduleValidation,

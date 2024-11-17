@@ -1,5 +1,9 @@
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+const db = require('../models');
+
+dotenv.config();
 
 const createHashPassword = async (userInfo) => {
   try{
@@ -35,19 +39,67 @@ const passwordChangeToHash = async (password, salt) => {
   return hashPassword
 }
 
-const createToken = async (id, email) => {
-  const token = jwt.sign(
-      {   
-          id:id,
-          email : email,
-      }, 
-      process.env.JWT_SECRET, 
-      {expiresIn : '200m', issuer : 'dev1'}
-  );
-  return token
-};
+const createAccessToken = async(userInfo) => {
+  try{
+    const accessToken = jwt.sign(
+      {
+        id: userInfo.id,
+        name: userInfo.name,
+        email: userInfo.email
+      },
+      process.env.ACCESS_TOKEN_SECRET_KEY,
+      { expiresIn: '1d' }
+    );
+    return accessToken;
+  }catch(err){
+    throw new Error('createAccessToken Err', err)
+  }
+}
+
+const createRefreshToken = async(userInfo) => {
+  try{
+    const refreshToken = jwt.sign(
+      {
+        id: userInfo.id,
+        name: userInfo.name,
+        email: userInfo.email
+      },
+      process.env.REFRESH_TOKEN_SECRET_KEY,
+      { expiresIn: '7d' }
+    );
+    return refreshToken;
+  }catch(err){
+    throw new Error('createRefreshToken Err', err)
+  }
+}
+
+const verifyToken = async (token) => {
+  try{
+    const userInfo = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY)
+    return userInfo
+  }catch(err){
+    return false
+  }
+}
+
+const isMatchRefreshToken = async(token) => {
+  try{
+    const refreshTokenInfo = await db.Token.findOne({where: {token: token}, raw: true});
+    if (token == refreshTokenInfo.token){
+      return true
+    }else{
+      return false
+    }
+  }catch(err){
+    return false
+  }
+}
+
 module.exports = {
   createHashPassword,
   isMatchPassword,
-  createToken
+  createAccessToken,
+  createRefreshToken,
+  verifyToken,
+  isMatchRefreshToken
 }

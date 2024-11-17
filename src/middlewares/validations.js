@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+const { body, validationResult, param } = require('express-validator');
 const { StatusCodes} = require('http-status-codes')
 
 const validate = (req,res,next) =>{
@@ -7,6 +7,7 @@ const validate = (req,res,next) =>{
   if(err.isEmpty()){
     return next()
   }else{
+    console.log(err)
     return res.status(StatusCodes.BAD_REQUEST).json(err.array())
   }
 }
@@ -20,13 +21,44 @@ const signupValidation = [
   validate
 ];
 
-const loginValiation = [
+const loginValidation = [
   body('email').isEmail(),
   body('password').isString(),
   validate
 ]
 
+const createTripValidation = [
+  body('name').isString(),
+  body('description').isString(),
+  body('startDate').isDate(),
+  body('endDate').isDate(),
+  validate
+]
+
+const paramChangeToInt = [
+  param('id').optional().isInt().toInt(),
+  validate
+]
+
+const scheduleValidation = [
+  body('tripId').isInt(),
+  body('placeId').isInt(),
+  body('date').isInt(),
+  body('orderId').isInt(),
+  validate
+]
+
+const reivewValidation = [
+  body('placeId').isInt(),
+  body('description').isString(),
+  validate
+]
+
 module.exports = {
   signupValidation,
-  loginValiation
+  loginValidation,
+  createTripValidation,
+  paramChangeToInt,
+  scheduleValidation,
+  reivewValidation
 }

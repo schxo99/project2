@@ -5,7 +5,10 @@ const getSchedule = async (tripId) => {
     const scheduleInfo = await db.Schedule.findAll({
       where: {
         tripId: tripId
-      }
+      },
+      order:[
+        ['orderId', 'ASC']
+      ],
     })
     return scheduleInfo
   }catch(err){
@@ -15,23 +18,44 @@ const getSchedule = async (tripId) => {
 
 const addSchedule = async (scheduleInfo) => {
   // trip기간에 해당안되는 date가 들어오는 예외처리해야함
+  console.log(scheduleInfo)
   try{
     console.log(scheduleInfo)
-    scheduleInfo.forEach(async (element)  => {
+    for (const element of scheduleInfo) {
       await db.Schedule.create({
         tripId: element.tripId,
-        placeId: element.placeId,
         date: element.date,
+        type: element.type,
+        description: element.description,
+        startTime: element.startTime,
+        endTime: element.endTime,
         orderId: element.orderId
-      })
-    });
-    return
+      });
+    }
+    return true
   }catch(err){
     throw new Error('scheduleService addSchedule Err', err)
   }
 }
 
+const deleteSchedule = async(schedules) => {
+  try{
+    for(const element of schedules) {
+      await db.Schedule.destroy({
+        where: {
+          id: element.id
+        }
+      })
+    }
+    return true
+  }catch(err){
+    console.log(err)
+    throw new Error('scheduleService deleteSchedule Err', err)
+  }
+}
+
 module.exports = {
   getSchedule,
-  addSchedule
+  addSchedule,
+  deleteSchedule
 }

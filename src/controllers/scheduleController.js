@@ -15,25 +15,36 @@ const getSchedule = async (req,res) => {
 const addSchedule = async(req,res) => {
   try{
     const scheduleInfo = req.body;
-    await scheduleService.addSchedule(scheduleInfo.schedules);
-    const schedulesInfo = await scheduleService.getSchedule(scheduleInfo.schedules[0].tripId)
-    return res.status(StatusCodes.OK).json(schedulesInfo)
+    if(await scheduleService.addSchedule(scheduleInfo.schedules)){
+      const schedulesInfo = await scheduleService.getSchedule(scheduleInfo.schedules[0].tripId)
+      return res.status(StatusCodes.OK).json(schedulesInfo)
+    }
+    return res.status(StatusCodes.BAD_REQUEST).json({message:'잘못된 요청입니다.'})
   }catch(err){
     console.log(err)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({messgae: '서버 에러'})
   }
 }
 
-// const deleteSchedule = async(req,res) => {
-//   try{
-
-//   }catch(err){
-//     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:'서버에러'})
-//   }
-// }
+const updateSchedule = async(req,res) => {
+  try{
+    const scheduleInfo = req.body;
+    const schedules = scheduleInfo.schedules
+    const tripId = scheduleInfo.schedules[0].tripId
+    if(await scheduleService.deleteSchedule(schedules)){
+      await scheduleService.addSchedule(schedules)
+      const schedulesInfo = await scheduleService.getSchedule(tripId)
+      return res.status(StatusCodes.OK).json(schedulesInfo)
+    }
+    throw new Error('흐음')
+  }catch(err){
+    console.log(err)
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({messgae:'서버 에러'})
+  }
+}
 
 module.exports = {
   getSchedule,
   addSchedule,
-  // deleteSchedule
+  updateSchedule,
 }

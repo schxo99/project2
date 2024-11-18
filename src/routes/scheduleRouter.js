@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const scheduleController = require('../controllers/scheduleController');
+const {getSchedule, addSchedule, updateSchedule} = require('../controllers/scheduleController');
 const {authToken} = require('../middlewares//authToken')
-const {paramChangeToInt} = require('../middlewares/validations');
+const {paramValidate} = require('../middlewares/validations');
 
 
 router
   .route('/:id?')
-  .get(authToken, paramChangeToInt, scheduleController.getSchedule)
-  .post(authToken, scheduleController.addSchedule)
-//   .put() //스케쥴 수정
-  // .delete(authToken, scheduleController.deleteSchedule) //스케쥴 삭제
+  .get(authToken, paramValidate, getSchedule)
+  .post(authToken, addSchedule)
+  .put(authToken, updateSchedule)
 
 module.exports = router;

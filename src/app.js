@@ -19,9 +19,7 @@ sequelize.sync({ force: false })
 const userRouter = require('./routes/userRouter');
 const tripRouter = require('./routes/tripRouter');
 const scheduleRouter = require('./routes/scheduleRouter');
-const reviewRouter = require('./routes/reviewRouter')
 
 app.use('/users', userRouter);
 app.use('/trip', tripRouter);
 app.use('/schedule', scheduleRouter);
-app.use('/review', reviewRouter)

@@ -40,10 +40,6 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       defaultValue: null
     },
-    status: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
-    }
   },
   {
     tableName: 'trip',

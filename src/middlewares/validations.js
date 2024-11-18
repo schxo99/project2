@@ -27,38 +27,34 @@ const loginValidate = [
   validate
 ]
 
-const createTripValidation = [
+const createTripValidate = [
   body('name').isString(),
   body('description').isString(),
   body('startDate').isDate(),
   body('endDate').isDate(),
   validate
-]
+];
 
-const paramChangeToInt = [
+const paramValidate = [
   param('id').optional().isInt().toInt(),
   validate
-]
+];
 
-const scheduleValidation = [
+const scheduleValidate = [
   body('tripId').isInt(),
-  body('placeId').isInt(),
   body('date').isInt(),
+  body('type').isIn(['메모','장소','식당','카페','교통','숙소']),
+  body('description').optional().isString(),
+  body('startTime').optional().isTime(),
+  body('endTime').optional().isTime(),
   body('orderId').isInt(),
   validate
-]
-
-const reivewValidation = [
-  body('placeId').isInt(),
-  body('description').isString(),
-  validate
-]
+];
 
 module.exports = {
   signupValidate,
   loginValidate,
-  createTripValidation,
-  paramChangeToInt,
-  scheduleValidation,
-  reivewValidation
-}
+  createTripValidate,
+  paramValidate,
+  scheduleValidate,
+};

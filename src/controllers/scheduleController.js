@@ -5,7 +5,7 @@ const getSchedule = async (req,res) => {
   try{
     const {id} = req.params;
     const scheduleInfo = await scheduleService.getSchedule(id)
-    return res.status(StatusCodes.OK).json(scheduleInfo)
+    return res.status(StatusCodes.OK).json({schedules: scheduleInfo})
   }catch(err){
     console.log(err)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:'서버 에러'});
@@ -17,7 +17,7 @@ const addSchedule = async(req,res) => {
     const scheduleInfo = req.body;
     if(await scheduleService.addSchedule(scheduleInfo.schedules)){
       const schedulesInfo = await scheduleService.getSchedule(scheduleInfo.schedules[0].tripId)
-      return res.status(StatusCodes.OK).json(schedulesInfo)
+      return res.status(StatusCodes.OK).json({schedules: schedulesInfo})
     }
     return res.status(StatusCodes.BAD_REQUEST).json({message:'잘못된 요청입니다.'})
   }catch(err){
@@ -34,7 +34,7 @@ const updateSchedule = async(req,res) => {
     if(await scheduleService.deleteSchedule(schedules)){
       await scheduleService.addSchedule(schedules)
       const schedulesInfo = await scheduleService.getSchedule(tripId)
-      return res.status(StatusCodes.OK).json(schedulesInfo)
+      return res.status(StatusCodes.OK).json({schedules: schedulesInfo})
     }
     throw new Error('흐음')
   }catch(err){

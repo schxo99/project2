@@ -38,8 +38,28 @@ const deleteTrip = async(id) => {
   }
 }
 
+const updateTrip = async(tripInfo) => {
+  try{
+    await db.Trip.update(
+      {
+        name: tripInfo.name,
+        description: tripInfo.description,
+        startDate: tripInfo.startDate,
+        endDate: tripInfo.endDate
+      },
+      {
+        where :{ id: tripInfo.id }
+      }
+    )
+    return true
+  }catch(err){
+    throw new Error('tripService updateTrip Err', err)
+  }
+}
+
 module.exports = {
   createTrip,
   findTripAll,
   deleteTrip,
+  updateTrip
 }

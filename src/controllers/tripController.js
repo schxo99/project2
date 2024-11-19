@@ -47,8 +47,23 @@ const deleteTrip = async (req,res) => {
   }
 }
 
+const updateTrip = async (req,res) => {
+  try{
+    const tripInfo = req.body;
+    const userInfo = req.userInfo;
+    if(await tripService.updateTrip(tripInfo)){
+      const tripsInfo = await tripService.findTripAll(userInfo.id)
+      return res.status(StatusCodes.OK).json(tripsInfo);
+    }
+    return res.status(StatusCodes.BAD_REQUEST).json({message: '업뎃 실패'})
+  }catch(err){
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:'서버 에러'})
+  }
+}
+
 module.exports = {
   createTrip,
   getTrips,
   deleteTrip,
+  updateTrip
 }

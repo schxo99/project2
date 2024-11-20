@@ -27,7 +27,8 @@ const loginValidate = [
   validate
 ]
 
-const createTripValidate = [
+const tripValidate = [
+  body('id').optional().isInt(),
   body('name').isString(),
   body('description').isString(),
   body('startDate').isDate(),
@@ -54,7 +55,7 @@ const scheduleValidate = [
 module.exports = {
   signupValidate,
   loginValidate,
-  createTripValidate,
+  tripValidate,
   paramValidate,
   scheduleValidate,
 };

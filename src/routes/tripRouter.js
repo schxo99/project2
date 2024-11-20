@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const tripController = require('../controllers/tripController');
+const {getTrips, createTrip, deleteTrip, updateTrip} = require('../controllers/tripController');
 const {authToken} = require('../middlewares//authToken')
-const {createTripValidation, paramChangeToInt} = require('../middlewares/validations');
+const {tripValidate, paramValidate} = require('../middlewares/validations');
 
 router
   .route('/:id?')
-  .get(authToken, tripController.getTrips)
-  .post(authToken, createTripValidation, tripController.createTrip)
-  // .put(tripController.changeTrip) // 여행 수정
-  .delete(authToken, paramChangeToInt, tripController.deleteTrip)
+  .get(authToken, paramValidate, getTrips)
+  .post(authToken, tripValidate, createTrip)
+  .put(authToken, tripValidate, updateTrip) // 여행 수정
+  .delete(authToken, paramValidate, deleteTrip)
 
 module.exports = router;

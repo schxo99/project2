@@ -12,7 +12,7 @@ const validate = (req,res,next) =>{
   }
 }
 
-const signupValidation = [
+const signupValidate = [
   body('name').isString(),
   body('email').isEmail(),
   body('password').isString().isLength({min: 4}),
@@ -21,44 +21,41 @@ const signupValidation = [
   validate
 ];
 
-const loginValidation = [
+const loginValidate = [
   body('email').isEmail(),
   body('password').isString(),
   validate
 ]
 
-const createTripValidation = [
+const tripValidate = [
+  body('id').optional().isInt(),
   body('name').isString(),
   body('description').isString(),
   body('startDate').isDate(),
   body('endDate').isDate(),
   validate
-]
+];
 
-const paramChangeToInt = [
+const paramValidate = [
   param('id').optional().isInt().toInt(),
   validate
-]
+];
 
-const scheduleValidation = [
+const scheduleValidate = [
   body('tripId').isInt(),
-  body('placeId').isInt(),
   body('date').isInt(),
+  body('type').isIn(['메모','장소','식당','카페','교통','숙소']),
+  body('description').optional().isString(),
+  body('startTime').optional().isTime(),
+  body('endTime').optional().isTime(),
   body('orderId').isInt(),
   validate
-]
-
-const reivewValidation = [
-  body('placeId').isInt(),
-  body('description').isString(),
-  validate
-]
+];
 
 module.exports = {
-  signupValidation,
-  loginValidation,
-  createTripValidation,
-  paramChangeToInt,
-  scheduleValidation,
-  reivewValidation
-}
+  signupValidate,
+  loginValidate,
+  tripValidate,
+  paramValidate,
+  scheduleValidate,
+};

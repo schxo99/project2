@@ -10,7 +10,5 @@ db.User = require('./user')(sequelize, DataTypes)
 db.Token = require('./token')(sequelize, DataTypes)
 db.Trip = require('./trip')(sequelize, DataTypes)
 db.Schedule = require('./schedule')(sequelize, DataTypes)
-db.Review = require('./review')(sequelize, DataTypes)
-
 
 module.exports = db;

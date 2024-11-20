@@ -2,9 +2,11 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const { sequelize } = require('./models')
+const cors = require('cors');
 
 app.use(express.json());
 dotenv.config();
+app.use(cors());
 
 app.listen(process.env.PORT);
 
@@ -19,9 +21,7 @@ sequelize.sync({ force: false })
 const userRouter = require('./routes/userRouter');
 const tripRouter = require('./routes/tripRouter');
 const scheduleRouter = require('./routes/scheduleRouter');
-const reviewRouter = require('./routes/reviewRouter')
 
 app.use('/users', userRouter);
 app.use('/trip', tripRouter);
 app.use('/schedule', scheduleRouter);
-app.use('/review', reviewRouter)

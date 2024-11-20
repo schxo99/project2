@@ -10,10 +10,6 @@ module.exports = (sequelize, Datatypes) => {
       type: Datatypes.INTEGER,
       allowNull: false,
     },
-    placeId: {
-      type:Datatypes.INTEGER,
-      allowNull: true,
-    },
     date: {
       type: Datatypes.INTEGER,
       allowNull: false
@@ -34,9 +30,9 @@ module.exports = (sequelize, Datatypes) => {
       type: Datatypes.INTEGER,
       allowNull: false,
     },
-    status:{
-      type: Datatypes.INTEGER,
-      defaultValue: 0
+    type:{
+      type: Datatypes.STRING(45),
+      allowNull: false,
     } 
   },
   {

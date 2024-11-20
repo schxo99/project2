@@ -1,4 +1,6 @@
 # TravelPlanner
-// 로그인, 회원가입 -> 예외처리해야함
-// 여행, 스케쥴 -> 뼈대 생성 
+예외처리 해야함
 
+
+ToDo
+trip, schedule crud 시 유저 id가 맞는지 

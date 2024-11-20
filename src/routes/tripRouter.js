@@ -7,8 +7,8 @@ const {tripValidate, paramValidate} = require('../middlewares/validations');
 router
   .route('/:id?')
   .get(authToken, paramValidate, getTrips)
+  .put(authToken, updateTrip)
   .post(authToken, tripValidate, createTrip)
-  .put(authToken, tripValidate, updateTrip) // 여행 수정
   .delete(authToken, paramValidate, deleteTrip)
 
 module.exports = router;

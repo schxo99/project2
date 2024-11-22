@@ -38,6 +38,27 @@ const login = async (email, password) => {
   }
 };
 
+const fblogin = async (userInfo) => {
+  try{
+    const findUserInfo = await db.User.findOne({ where: { id: userInfo.id }, raw: true });
+    
+    if(!findUserInfo){
+      await db.User.create({
+        id: userInfo.id,
+        name: userInfo.name,
+        email: userInfo.email,
+      });
+
+      return false;
+    }
+
+    return true;
+  }catch(err){
+    console.log(err)
+    throw new Error('userService login Err', err)
+  }
+};
+
 const logout = async(id) => {
   try{
     await db.Token.destroy({where: {userId:id}})
@@ -59,5 +80,6 @@ module.exports = {
   createUser,
   login,
   logout,
-  updateAccessToken
+  updateAccessToken,
+  fblogin
 };

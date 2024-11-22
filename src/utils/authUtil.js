@@ -82,6 +82,22 @@ const verifyToken = async (token) => {
   }
 }
 
+// const verifyIdToken = async (token) => {
+//   try{
+//     await admin.auth()
+//       .verifyIdToken(token)
+//       .then((decodedToken) => {
+//         console.log(decodedToken)
+//         return decodedToken;
+//       })
+//       .catch((error) => {
+//         console.log("verifyIdToken Error!!!!: ", error);
+//       });
+//   }catch(err){
+//     return false
+//   }
+// }
+
 const isMatchRefreshToken = async(token) => {
   try{
     const refreshTokenInfo = await db.Token.findOne({where: {token: token}, raw: true});

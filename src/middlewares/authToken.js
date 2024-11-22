@@ -1,16 +1,30 @@
 const { verifyToken } = require('../utils/authUtil');
 const { StatusCodes } = require('http-status-codes');
-const authUtil = require('../utils/authUtil')
+const authUtil = require('../utils/authUtil');
+const admin = require("firebase-admin");
+const serviceAccount = require("../../serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
 const authToken = async (req,res,next) => {
   try{
     const accessToken = req.headers.authorization?.split(' ')[1];
-    const userInfo = await verifyToken(accessToken)
-    if(!userInfo){
-      return res.status(StatusCodes.UNAUTHORIZED).json({message:'유효하지 않은 토큰'}) 
-    }
-    req.userInfo = userInfo;
-    next()
+
+    //authUtil로 빼고 싶음...
+    await admin.auth()
+      .verifyIdToken(accessToken)
+      .then((decodedToken) => {
+        decodedToken = {...decodedToken, id: decodedToken.uid}
+        req.userInfo = decodedToken;
+        next()
+      })
+      .catch((error) => {
+        console.log("authToken userInfo Error!!!!: ", error);
+        res.status(StatusCodes.UNAUTHORIZED).json({message:'유효하지 않은 토큰'})
+      });
+
   }catch(err){
     console.log(err)
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({messgae:'서버 에러'})

@@ -33,6 +33,25 @@ const login = async (req,res) => {
   }
 }
 
+const fbLogin = async (req,res) => {
+  const userInfo = req.userInfo;
+  console.log("fbLogin userInfo", userInfo);
+
+  try{
+    let checkFbsignup = await userService.fblogin(userInfo);
+    
+    if(checkFbsignup){
+      return res.status(StatusCodes.OK).json({message:'로그인 성공'})
+    }else if(!checkFbsignup){
+      return res.status(StatusCodes.CREATED).json({message:'회원등록 및 로그인 성공'})
+    }
+    return res.status(StatusCodes.BAD_REQUEST).json({message:'로그인 실패'})
+  }catch(err){
+    console.log(err)
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:'서버 에러'})
+  }
+}
+
 const logout = async (req,res) => {
   try{
     const userInfo = req.userInfo;
@@ -59,5 +78,6 @@ module.exports = {
   signup,
   login,
   logout,
-  updateAccessToken
+  updateAccessToken,
+  fbLogin
 };

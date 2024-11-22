@@ -2,7 +2,7 @@ const { StatusCodes } = require("http-status-codes");
 const userService = require('../services/userService')
 
 const signup = async (req,res) => {
-  const userInfo = req.body; // userInfo = {name, email, password, gender, provider}
+  const userInfo = req.body;
   try{
     if(await userService.createUser(userInfo)){
       return res.status(201).json({message:'가입완료'})
@@ -55,9 +55,57 @@ const updateAccessToken = async (req,res) => {
   }
 }
 
+const findUserInfo = async (req,res) => {
+  try{
+    let userInfo = req.userInfo;
+    userInfo = await userService.findUser(userInfo.email)
+    return res.status(StatusCodes.OK).json({
+      id: userInfo.id,
+      email: userInfo.email,
+      gender: userInfo.gender,
+      createdAt: userInfo.createdAt,
+      updatedAt: userInfo.updatedAt,
+      provider: userInfo.provider
+    })
+  }catch(err){
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:'서버 에러'})
+  }
+}
+
+const changePassword = async(req,res) => {
+  try{
+    const userInfo = req.userInfo;
+    const {password, newPassword} = req.body;
+    console.log(userInfo)
+    console.log(password, newPassword)
+    if(await userService.changePassword(userInfo.email, password, newPassword)){
+      return res.status(StatusCodes.OK).json({message:'비밀번호 변경완료'})
+    }
+    return res.status(StatusCodes.BAD_REQUEST).json({message:'잘못된 요청입니다.'})
+  }catch(err){
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:'서버 에러'})
+  }
+}
+
+const deleteUser = async (req,res) => {
+  try{
+    const userInfo = req.userInfo;
+    const {password} = req.body;
+    if(await userService.deleteUser(userInfo.email, password)){
+      return res.status(StatusCodes.OK).json({message:'탈퇴 되었습니다.'})
+    }
+    return res.status(StatusCodes.BAD_REQUEST).json({message: '잘못된 정보입니다.'})
+  }catch(err){
+    console.log(err)
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({message:'서버 에러'})
+  }
+}
 module.exports = {
   signup,
   login,
   logout,
-  updateAccessToken
+  updateAccessToken,
+  findUserInfo,
+  changePassword,
+  deleteUser
 };

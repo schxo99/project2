@@ -1,6 +1,6 @@
 const db = require('../models');
 const {createAccessToken, createRefreshToken, isMatchPassword, createHashPassword} = require('../utils/authUtil');
-
+const authUtil = require('../utils/authUtil')
 const createUser = async (userInfo) => {
   try{
     userInfo = await createHashPassword(userInfo);
@@ -18,9 +18,18 @@ const createUser = async (userInfo) => {
   }
 };
 
-const login = async (email, password) => {
+const findUser = async (email) => {
   try{
     const userInfo = await db.User.findOne({ where: { email: email }, raw: true });
+    return userInfo
+  }catch(err){
+    throw new Error('userService findUser Err', err)
+  }
+}
+
+const login = async (email, password) => {
+  try{
+    const userInfo = await findUser(email)
     await logout(userInfo.id)
     if(userInfo && await isMatchPassword(userInfo, password)){
       const accessToken = await createAccessToken(userInfo)
@@ -55,9 +64,62 @@ const updateAccessToken = async(userInfo) => {
     throw new Error('userService updateAccessToken Err', err)
   }
 }
+
+const changePassword = async(email, password, newPassword) => {
+  try{
+    const userInfo = await findUser(email)
+    if(await isMatchPassword(userInfo, password) && password !== newPassword){
+      const salt = await authUtil.createRandomSalt()
+      const newHashPassword = await authUtil.passwordChangeToHash(newPassword, salt)
+      await db.User.update({
+        hashPassword: newHashPassword,
+        salt: salt
+      },
+      {
+        where: {email: email,}
+      }
+      );
+      return true
+    }
+    return false
+  }catch(err){
+    throw new Error('userService changePassword Err', err)
+  }
+}
+
+const deleteUser = async(email, password) => {
+  try{
+    const userInfo = await findUser(email)
+    console.log(userInfo)
+    console.log(password)
+    if(await isMatchPassword(userInfo, password)){
+      await db.DelUser.create({
+        id: userInfo.id,
+        email: userInfo.email,
+        name: userInfo.name,
+        gender: userInfo.gender,
+        provider: userInfo.provider,
+        createdAt: userInfo.createdAt,
+        updatedAt: userInfo.updatedAt,
+        deletedAt: userInfo.deletedAt,
+      });
+
+      await db.User.destroy({where: {id:userInfo.id}})
+      return true;
+    }
+    return false
+  }catch(err){
+    console.log(err)
+    throw new Error('userService deleteUser Err', err)
+  }
+}
+
 module.exports = {
   createUser,
   login,
   logout,
-  updateAccessToken
+  updateAccessToken,
+  findUser,
+  changePassword,
+  deleteUser
 };

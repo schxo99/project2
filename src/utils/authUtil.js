@@ -101,5 +101,7 @@ module.exports = {
   createAccessToken,
   createRefreshToken,
   verifyToken,
-  isMatchRefreshToken
+  isMatchRefreshToken,
+  createRandomSalt,
+  passwordChangeToHash
 }

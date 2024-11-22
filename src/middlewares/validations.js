@@ -52,10 +52,17 @@ const scheduleValidate = [
   validate
 ];
 
+const changePasswordValidate = [
+  body('password').isString(),
+  body('newPassword').isString(),
+  validate
+]
+
 module.exports = {
   signupValidate,
   loginValidate,
   tripValidate,
   paramValidate,
   scheduleValidate,
+  changePasswordValidate
 };

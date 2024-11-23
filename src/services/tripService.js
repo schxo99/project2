@@ -29,17 +29,6 @@ const findTripAll = async (id) => {
   }
 }
 
-const findTrip = async (id) => {
-  try{
-    const tripsInfo = db.Trip.findAll({
-      where: {id: id},
-    })
-    return tripsInfo
-  }catch(err){
-    throw new Error('tripService findTrip Err', err)
-  }
-}
-
 const deleteTrip = async(id) => {
   try{
     await db.Trip.destroy({where: {id: id}})
@@ -51,17 +40,18 @@ const deleteTrip = async(id) => {
 
 const updateTrip = async(id, tripInfo) => {
   try{
-    await db.Trip.update({
-      name: tripInfo.name,
-      description: tripInfo.description,
-      startDate: tripInfo.startDate,
-      endDate: tripInfo.endDate,
-    },
-    {
-      where: {id: id,}
-    }
-  );
-    return true;
+    await db.Trip.update(
+      {
+        name: tripInfo.name,
+        description: tripInfo.description,
+        startDate: tripInfo.startDate,
+        endDate: tripInfo.endDate
+      },
+      {
+        where :{ id: id }
+      }
+    )
+    return true
   }catch(err){
     throw new Error('tripService updateTrip Err', err)
   }
@@ -71,6 +61,5 @@ module.exports = {
   createTrip,
   findTripAll,
   deleteTrip,
-  updateTrip,
-  findTrip
+  updateTrip
 }
